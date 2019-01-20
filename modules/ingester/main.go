@@ -32,7 +32,7 @@ var (
 	LL                = "L"
 	AiChallengeMetric = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: "aiops",
-		Subsystem: "ingeter",
+		Subsystem: "ingester",
 		Help:      "aiops challenge example metric data",
 		Name:      "ai_metric",
 	}, []string{LI, LE, LC, LP, LL})
