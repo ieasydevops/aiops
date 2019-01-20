@@ -57,11 +57,11 @@ func parseFlags() *config {
 		influxdbPassword: os.Getenv("INFLUXDB_PW"),
 	}
 
-	flag.StringVar(&cfg.ingestionFile, "ingestionFile", "/Users/blackwood/work/golang/src/github.com/meixinyun/aiops/data/2019AIOps_data/1535731200000.csv",
+	flag.StringVar(&cfg.ingestionFile, "ingestionFile", "../../data/2019AIOps_data/1535731200000.csv",
 		"load csv data.",
 	)
 
-	flag.StringVar(&cfg.dataBase, "dataBase", "/Users/blackwood/work/golang/src/github.com/meixinyun/aiops/data/2019AIOps_data",
+	flag.StringVar(&cfg.dataBase, "dataBase", "../../data/2019AIOps_data",
 		"load csv data.",
 	)
 
@@ -99,7 +99,7 @@ func main() {
 	fileNames := FileDir(logger, cfg)
 	writers := buildClients(logger, cfg)
 	var wg sync.WaitGroup
-	for _,fName :=range fileNames {
+	for _, fName := range fileNames {
 		samples := ingestionFromFile(logger, cfg, fName)
 		for _, w := range writers {
 			wg.Add(1)
@@ -157,18 +157,9 @@ func FileDir(log log.Logger, cfg *config) []string {
 	return ret.List()
 }
 
-
-
-
-
-
-
 func ingestionFromFile(logger log.Logger, cfg *config, fileName string) model.Samples {
 
-
 	level.Info(logger).Log("msg", "ingestionFile ", "path", strings.Join([]string{cfg.dataBase, fileName}, "/"))
-
-
 
 	file, err := os.Open(cfg.ingestionFile)
 	if err != nil {
@@ -196,7 +187,7 @@ func ingestionFromFile(logger log.Logger, cfg *config, fileName string) model.Sa
 		if len(record) == 6 {
 			if tm, err := strconv.ParseInt(fileName, 10, 64); err == nil {
 				if mv, err := strconv.ParseFloat(record[5], 64); err == nil {
-					level.Debug(logger).Log("msg", "timestamp", tm)
+					level.Debug(logger).Log("msg", "build data samples", "timestamp", tm)
 					samples = append(samples, &model.Sample{
 						Metric: model.Metric(model.LabelSet{
 							model.LabelName(model.MetricNameLabel): model.LabelValue("ops_metric"),
